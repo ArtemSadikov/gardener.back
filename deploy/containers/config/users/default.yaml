@@ -1,0 +1,8 @@
+port: 3000
+
+db:
+  port: 5432
+  host: gardener-postgres
+  user: gardener
+  password: gardener
+  db_name: users

@@ -1,0 +1,37 @@
+version: '3.9'
+name: 'gardener'
+
+services:
+  users_api:
+    build: ../../services/users
+    depends_on:
+      - postgres
+      - dependencies
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./config/users:/go/bin/config
+
+  dependencies:
+    build: ../../
+
+  postgres:
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    container_name: gardener-postgres
+    expose:
+      - ${POSTGRES_PORT}
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+volumes:
+  postgres:
+    driver: local
